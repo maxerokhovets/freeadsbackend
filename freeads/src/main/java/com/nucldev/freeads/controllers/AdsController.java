@@ -24,8 +24,6 @@ public class AdsController {
     public List<Ad> getAds(){
         Ad ad = new Ad();
         ad.setId(1l);
-        ad.setCaption("book");
-        ad.setPrice(200);
         adRepository.save(ad);
         return adRepository.findAll();
     }
