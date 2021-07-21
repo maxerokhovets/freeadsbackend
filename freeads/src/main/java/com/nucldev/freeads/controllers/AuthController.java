@@ -12,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +27,6 @@ import com.nucldev.freeads.repositories.UserRepository;
 import com.nucldev.freeads.security.JwtTokenProvider;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/auth")
 public class AuthController {
     
@@ -60,18 +58,34 @@ public class AuthController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
     
+    
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+        
+        if(signUpRequest.getUsername().equals("") || signUpRequest.getEmail().equals("")
+                || signUpRequest.getPassword().equals("") || signUpRequest.getPassword1().equals("")) {
+            return new ResponseEntity(new ApiResponse(false, "Для регистрации заполните все поля!"),
+                    HttpStatus.BAD_REQUEST);
+            
+        }
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
+            return new ResponseEntity(new ApiResponse(false, "Пользователь с таким именем уже существует!"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity(new ApiResponse(false, "Email Address already in use!"),
+            return new ResponseEntity(new ApiResponse(false, "Пользователь с таким адресом электронной почты уже существует!"),
                     HttpStatus.BAD_REQUEST);
         }
-
+        if(!signUpRequest.getEmail().matches(".+@.+")) {
+            return new ResponseEntity(new ApiResponse(false, "Введите действительный адрес электронной почты!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        
+        if(!signUpRequest.getPassword().equals(signUpRequest.getPassword1())) {
+            return new ResponseEntity(new ApiResponse(false, "Пароли не совпадают!"), HttpStatus.BAD_REQUEST);
+        }
+        
         // Creating user's account
         User user = new User();
 
@@ -85,6 +99,6 @@ public class AuthController {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(result.getUsername()).toUri();
-        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+        return ResponseEntity.created(location).body(new ApiResponse(true, "Ваш аккаунт успешно зарегистрирован!"));
     }
 }

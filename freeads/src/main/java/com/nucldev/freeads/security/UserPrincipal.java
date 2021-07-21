@@ -1,6 +1,7 @@
 package com.nucldev.freeads.security;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -27,12 +28,15 @@ public class UserPrincipal implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
     
-    public UserPrincipal(Long id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    private Date registrationDate;
+    
+    public UserPrincipal(Long id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities, Date registrationDate) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.registrationDate = registrationDate;
     }
     
     public static UserPrincipal create(User user) {
@@ -45,7 +49,8 @@ public class UserPrincipal implements UserDetails {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
-                authorities
+                authorities,
+                user.getRegistrationDate()
         );
     }
     
@@ -72,6 +77,10 @@ public class UserPrincipal implements UserDetails {
         return authorities;
     }
     
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

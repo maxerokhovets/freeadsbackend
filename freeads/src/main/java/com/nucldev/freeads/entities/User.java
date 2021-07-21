@@ -1,5 +1,7 @@
 package com.nucldev.freeads.entities;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,13 +16,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     @Column(columnDefinition = "text")
     private String username;
+    
     @Column(columnDefinition = "text")
     private String email;
+    
     @Column(columnDefinition = "text")
     private String password;
+    
     private String role;
+    
+    private Date registrationDate;
     
     public User() {
     }
@@ -64,5 +72,14 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-      
+
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+    
+    
 }
