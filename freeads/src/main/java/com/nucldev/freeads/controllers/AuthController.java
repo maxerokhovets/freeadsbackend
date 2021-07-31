@@ -1,6 +1,7 @@
 package com.nucldev.freeads.controllers;
 
 import java.net.URI;
+import java.util.Date;
 
 import javax.validation.Valid;
 
@@ -44,7 +45,7 @@ public class AuthController {
     
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
+        
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsernameOrEmail(),
@@ -93,6 +94,7 @@ public class AuthController {
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setRole("USER");
+        user.setRegistrationDate(new Date());
 
         User result = userRepository.save(user);
 
