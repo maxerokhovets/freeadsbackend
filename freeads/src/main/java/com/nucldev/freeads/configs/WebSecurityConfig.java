@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import com.nucldev.freeads.security.CustomUserDetailsService;
 import com.nucldev.freeads.security.JwtAuthenticationEntryPoint;
@@ -65,6 +66,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
+                .logout(logout -> logout
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessUrl("/auth/signout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies()
+                        .addLogoutHandler(new SecurityContextLogoutHandler()))
                 .authorizeRequests()
                     .antMatchers("/ads",
                         "/favicon.ico",
