@@ -96,6 +96,7 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setRole("USER");
         user.setRegistrationDate(new Date());
+        user.setAddsCount(0l);
 
         User result = userRepository.save(user);
 

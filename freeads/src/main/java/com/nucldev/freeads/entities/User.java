@@ -30,6 +30,8 @@ public class User {
     
     private Date registrationDate;
     
+    private Long addsCount;
+    
     public User() {
     }
 
@@ -80,6 +82,13 @@ public class User {
     public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
-    
-    
+
+    public Long getAddsCount() {
+        return addsCount;
+    }
+
+    public void setAddsCount(Long addsCount) {
+        this.addsCount = addsCount;
+    }
+        
 }

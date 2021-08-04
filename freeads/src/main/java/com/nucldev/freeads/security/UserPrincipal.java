@@ -30,13 +30,18 @@ public class UserPrincipal implements UserDetails {
     
     private Date registrationDate;
     
-    public UserPrincipal(Long id, String username, String email, String password, Collection<? extends GrantedAuthority> authorities, Date registrationDate) {
+    private Long addsCount;   
+    
+    public UserPrincipal(Long id, String username, String email, 
+            String password, Collection<? extends GrantedAuthority> authorities, 
+            Date registrationDate, Long addsCount) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
         this.registrationDate = registrationDate;
+        this.addsCount = addsCount;
     }
     
     public static UserPrincipal create(User user) {
@@ -50,7 +55,8 @@ public class UserPrincipal implements UserDetails {
                 user.getEmail(),
                 user.getPassword(),
                 authorities,
-                user.getRegistrationDate()
+                user.getRegistrationDate(),
+                user.getAddsCount()
         );
     }
     
@@ -79,6 +85,10 @@ public class UserPrincipal implements UserDetails {
     
     public Date getRegistrationDate() {
         return registrationDate;
+    }
+
+    public Long getAddsCount() {
+        return addsCount;
     }
 
     @Override
