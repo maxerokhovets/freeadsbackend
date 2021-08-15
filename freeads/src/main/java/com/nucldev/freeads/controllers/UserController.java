@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.nucldev.freeads.entities.User;
 import com.nucldev.freeads.payload.ApiResponse;
 import com.nucldev.freeads.payload.CurrentUserSummary;
 import com.nucldev.freeads.repositories.UserRepository;
@@ -27,6 +28,9 @@ public class UserController {
     
     @Autowired
     AmazonClient amazonClient;
+    
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping("/me")
     public CurrentUserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
@@ -71,6 +75,9 @@ public class UserController {
         } else {
             response.setSuccess(true);
             response.setMessage(amazonResponse);
+            User user = userRepository.findById(currentUser.getId()).get();
+            user.setProfilePhotoUrl(amazonResponse);
+            userRepository.save(user);
         }
         
         return response;
