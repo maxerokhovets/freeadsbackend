@@ -32,6 +32,9 @@ public class User {
     
     private Long addsCount;
     
+    @Column(columnDefinition = "text")
+    private String profilePhotoUrl;
+    
     public User() {
     }
 
@@ -90,5 +93,13 @@ public class User {
     public void setAddsCount(Long addsCount) {
         this.addsCount = addsCount;
     }
-        
+
+    public String getProfilePhotoUrl() {
+        return profilePhotoUrl;
+    }
+
+    public void setProfilePhotoUrl(String profilePhotoUrl) {
+        this.profilePhotoUrl = profilePhotoUrl;
+    }
+    
 }

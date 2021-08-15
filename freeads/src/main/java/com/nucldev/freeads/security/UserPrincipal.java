@@ -30,11 +30,13 @@ public class UserPrincipal implements UserDetails {
     
     private Date registrationDate;
     
-    private Long addsCount;   
+    private Long addsCount; 
+    
+    private String profilePhotoUrl;
     
     public UserPrincipal(Long id, String username, String email, 
             String password, Collection<? extends GrantedAuthority> authorities, 
-            Date registrationDate, Long addsCount) {
+            Date registrationDate, Long addsCount, String profilePhotoUrl) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -42,6 +44,7 @@ public class UserPrincipal implements UserDetails {
         this.authorities = authorities;
         this.registrationDate = registrationDate;
         this.addsCount = addsCount;
+        this.profilePhotoUrl = profilePhotoUrl;
     }
     
     public static UserPrincipal create(User user) {
@@ -56,7 +59,8 @@ public class UserPrincipal implements UserDetails {
                 user.getPassword(),
                 authorities,
                 user.getRegistrationDate(),
-                user.getAddsCount()
+                user.getAddsCount(),
+                user.getProfilePhotoUrl()
         );
     }
     
@@ -89,6 +93,10 @@ public class UserPrincipal implements UserDetails {
 
     public Long getAddsCount() {
         return addsCount;
+    }
+
+    public String getProfilePhotoUrl() {
+        return profilePhotoUrl;
     }
 
     @Override

@@ -14,14 +14,17 @@ public class CurrentUserSummary {
     
     private Long addsCount;
     
+    private String profilePhotoUrl;
+    
     
     public CurrentUserSummary(Long id, String username, String email, 
-            Date registrationDate, Long addsCount) {
+            Date registrationDate, Long addsCount, String profilePhotoUrl) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.registrationDate = registrationDate;
         this.addsCount = addsCount;
+        this.profilePhotoUrl = profilePhotoUrl;
     }
 
     public Long getId() {
@@ -42,6 +45,10 @@ public class CurrentUserSummary {
 
     public Long getAddsCount() {
         return addsCount;
-    }    
+    }
+
+    public String getProfilePhotoUrl() {
+        return profilePhotoUrl;
+    } 
     
 }
