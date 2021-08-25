@@ -1,12 +1,16 @@
 package com.nucldev.freeads.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
+
+
 import javax.persistence.Id;
 
 @Entity
@@ -16,14 +20,29 @@ public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     @Column(columnDefinition = "text")
     private String category;
+    
     @Column(columnDefinition = "text")
     private String title;
+    
     @Column(columnDefinition = "text")
     private String description;
-    private double price;
+    
+    private Double price;
+    
     private Date creationDate; 
+    
+    @Column(columnDefinition = "text")
+    private String adCoverUrl;
+    
+    @ElementCollection
+    private List<String> itemPhotosUrls;
+    
+    private boolean isActive;
+    
+    private String username;
     
     public Ad() {
     }
@@ -37,11 +56,11 @@ public class Ad {
     }
 
     
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -75,6 +94,38 @@ public class Ad {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getAdCoverUrl() {
+        return adCoverUrl;
+    }
+
+    public void setAdCoverUrl(String adCoverUrl) {
+        this.adCoverUrl = adCoverUrl;
+    }
+
+    public List<String> getItemPhotosUrls() {
+        return itemPhotosUrls;
+    }
+
+    public void setItemPhotosUrls(List<String> itemPhotosUrls) {
+        this.itemPhotosUrls = itemPhotosUrls;
+    }   
+    
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
     
 }

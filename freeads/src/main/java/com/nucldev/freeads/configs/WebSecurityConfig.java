@@ -73,7 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .deleteCookies()
                         .addLogoutHandler(new SecurityContextLogoutHandler()))
                 .authorizeRequests()
-                    .antMatchers("/ads",
+                    .antMatchers("/ads/getads",
                         "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",
@@ -84,8 +84,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js")
                         .permitAll()
                     .antMatchers("/auth/**")
-                        .permitAll()
-                    .antMatchers("/user/checkUsernameAvailability", "/user/checkEmailAvailability", "/user/setphoto", "/user/deletephoto")
                         .permitAll()
                     .anyRequest()
                         .authenticated();
