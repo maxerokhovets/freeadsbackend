@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.nucldev.freeads.entities.Ad;
+import com.nucldev.freeads.entities.User;
 import com.nucldev.freeads.payload.ApiResponse;
 import com.nucldev.freeads.repositories.AdRepository;
 import com.nucldev.freeads.repositories.UserRepository;
@@ -50,12 +51,11 @@ public class AdsController {
     @PostMapping("/createad")
     public ResponseEntity<?> createAd(@RequestParam("category") String category, @RequestParam("title") String title,
             @RequestParam("description") String description, @RequestParam("price") Double price,
-            @RequestParam("cover") MultipartFile cover, @RequestParam("photos") MultipartFile[] photos,
-            @CurrentUser UserPrincipal currentUser) {       
+            @RequestParam("cover") MultipartFile cover, @CurrentUser UserPrincipal currentUser) {       
         
         ResponseEntity response = new ResponseEntity(null, null);
         
-        if (category.equals("") || title.equals("")) {
+        if (title.equals("")) {
            response.ok(new ApiResponse(false, "Для публикации объявления заполните обязательные поля.")).status(HttpStatus.BAD_REQUEST);      
         } else {
             Ad ad = new Ad();
@@ -69,13 +69,12 @@ public class AdsController {
             if (!amazonResponse.equals("")) {
                 ad.setAdCoverUrl(amazonResponse);
             }
-            ad.setItemPhotosUrls(Arrays.stream(photos)
-                .map(p->amazonClient.uploadFile(p))
-                .filter(p->!p.equals(""))
-                .collect(Collectors.toList()));
             ad.setUsername(currentUser.getUsername());
+            User user = userRepository.findById(currentUser.getId()).get();
+            user.setAddsCount(user.getAddsCount()+1);
+            userRepository.save(user);            
             
-            response.ok(new ApiResponse(true, "Объявление успешно создано.")).status(HttpStatus.CREATED);
+            response.ok(new ApiResponse(true, "Объявление успешно опубликовано.")).status(HttpStatus.CREATED);
             adRepository.save(ad);  
         }
               
