@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +45,7 @@ public class UserController {
     }
     
     @PostMapping("/setphoto")
-    public ApiResponse setProfilePhoto(@RequestParam("file") MultipartFile file, @CurrentUser UserPrincipal currentUser) {
+    public ResponseEntity<?> setProfilePhoto(@RequestParam("file") MultipartFile file, @CurrentUser UserPrincipal currentUser) {
         
         ApiResponse response = new ApiResponse(null, null);
         String probeContentResponse = null;
@@ -53,7 +55,7 @@ public class UserController {
         } catch (IOException e) {
             response.setSuccess(false);
             response.setMessage("Не удалось загрузить фото.");
-            return response;
+            return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
         }
         
         String amazonResponse = "";
@@ -64,7 +66,7 @@ public class UserController {
             }else {
                 response.setSuccess(false);
                 response.setMessage("Не удалось загрузить фото. Файл не является изображением.");
-                return response;
+                return new ResponseEntity(response, HttpStatus.BAD_REQUEST);
             }
         }
         
@@ -80,11 +82,11 @@ public class UserController {
             userRepository.save(user);
         }
         
-        return response;
+        return new ResponseEntity(response, HttpStatus.OK);
     }
     
     @DeleteMapping("/deletephoto")
-    public ApiResponse deleteProfilePhoto(@RequestParam("url") String fileUrl) {
+    public ResponseEntity<?> deleteProfilePhoto(@RequestParam("url") String fileUrl) {
         
         ApiResponse response = new ApiResponse(null, null);
         String amazonResponse = amazonClient.deleteFileFromS3Bucket(fileUrl);
@@ -97,6 +99,6 @@ public class UserController {
             response.setMessage("Unsuccess!");
         }
         
-        return response;
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }
